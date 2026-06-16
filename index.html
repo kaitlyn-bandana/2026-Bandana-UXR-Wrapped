@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#fce776">
+<title>Bandana Research, Wrapped — 2023–2026</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+@font-face{
+  font-family:'Antarctica VAR';
+  src:url('Assets/Antarctica-VF.ttf.woff2') format('woff2'), url('Assets/Antarctica-VF.ttf') format('truetype');
+  font-weight:400 900;
+  font-stretch:55% 150%;
+  font-style:normal;
+  font-display:swap;
+}
+:root{
+  --yellow:#fce776; --yellow-deep:#efb745; --ink:#212121; --ink2:#474747; --soft:#6f6a68;
+  --white:#ffffff; --card-grey:#f1f1f1; --line:#e0e0e0;
+  --pos:#00b794; --neg:#ed7f54; --info:#5991d3; --badge-info:#dee9f6;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  font-family:'Antarctica VAR',sans-serif;color:var(--ink);background:var(--white);
+  font-variation-settings: normal;
+  display:flex;flex-direction:column;min-height:100vh;
+}
+
+/* Bold all header titles */
+h1,h2,h3,h4,h5,h6{font-weight:700}
+
+/* ============ NAV (per Figma 170:12137) ============ */
+nav.bar{
+  height:72px;background:#fff;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;padding:0 88px;flex:none;
+}
+@media(max-width:800px){nav.bar{padding:0 24px;}}
+.logo{display:flex;align-items:center;gap:14px;text-decoration:none;}
+.logo-wrapped{font-size:20px;color:#000;font-weight:400;font-variation-settings:'wght' 340,'wdth' 100,'CNTR' 100;letter-spacing:.2px;line-height:1;transform:translateY(-1px);}
+.nav-links{display:flex;gap:32px;font-weight:500;font-size:14px;color:var(--ink2);}
+.nav-links a{text-decoration:none;color:var(--ink2);transition:color .15s;}
+.nav-links a:hover{color:var(--ink);}
+@media(max-width:640px){.nav-links{display:none;}}
+
+/* ============ STAGE ============ */
+.stage{flex:1;display:flex;align-items:center;justify-content:center;position:relative;padding:28px 0;}
+.wrapper{width:min(1080px,calc(100vw - 48px));position:relative;}
+
+/* carousel card (per Figma 176:14787) */
+.deck{
+  position:relative;height:min(560px,calc(100vh - 230px));min-height:430px;
+  border-radius:16px;border:1px solid rgba(0,0,0,.18);overflow:hidden;background:var(--card-grey);
+}
+
+/* slide counter chip */
+.counter{position:absolute;top:26px;right:20px;z-index:30;font-size:11px;font-weight:600;color:rgba(33,33,33,.5);letter-spacing:.04em;}
+.deck.on-dark .counter{color:rgba(255,255,255,.55);}
+
+/* ============ SLIDES ============ */
+.slide{
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:54px 64px 40px;gap:14px;
+  opacity:0;visibility:hidden;transform:translateX(24px);
+  transition:opacity .35s ease,transform .35s ease,visibility .35s;
+}
+@media(max-width:700px){.slide{padding:54px 26px 32px;}}
+.slide.active{opacity:1;visibility:visible;transform:translateX(0);}
+.slide.exit-left{transform:translateX(-24px);}
+.slide h2{font-size:clamp(24px,3.5vw,38px);font-weight:600;letter-spacing:-.015em;line-height:1.06;max-width:780px;}
+.slide .big{font-size:clamp(64px,11vw,128px);font-weight:600;letter-spacing:-.04em;line-height:1;}
+.slide .big .suf{font-size:.35em;font-weight:600;letter-spacing:-.01em;opacity:.55;}
+.slide .sub{font-size:clamp(14px,1.5vw,16.5px);font-weight:400;line-height:1.45;letter-spacing:.01em;max-width:600px;color:inherit;opacity:.72;}
+.slide .sub b{font-weight:600;opacity:1;}
+.slide .sub + .sub{margin-top:-2px;}
+.slide .sub.kicker{font-weight:600;opacity:1;font-size:clamp(15px,1.7vw,18px);letter-spacing:0;max-width:640px;}
+
+/* cover background animation — bandana print from the logomark */
+.bg-band{position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden;
+  -webkit-mask-image:radial-gradient(120% 95% at 50% 46%,transparent 16%,#000 62%);
+  mask-image:radial-gradient(120% 95% at 50% 46%,transparent 16%,#000 62%);}
+.bg-band svg{width:100%;height:100%;display:block;}
+.bg-band .layerA{animation:driftA 90s linear infinite;}
+.bg-band .layerB{animation:driftB 150s linear infinite;}
+@keyframes driftA{to{transform:translate(220px,228px);}}
+@keyframes driftB{to{transform:translate(-160px,-166px);}}
+@media (prefers-reduced-motion:reduce){.bg-band .layerA,.bg-band .layerB{animation:none;}}
+
+/* slide palettes */
+.s-yellow{background:var(--yellow);color:var(--ink);}
+.s-dark{background:var(--ink);color:#fff;}
+.s-dark .hl{color:var(--yellow);}
+.s-white{background:#fff;color:var(--ink);}
+.s-grey{background:var(--card-grey);color:var(--ink);}
+
+/* full-bleed photo background (per Figma 225:12403) */
+.photo-bg{position:absolute;inset:0;z-index:-1;background:linear-gradient(rgba(18,17,16,.48),rgba(18,17,16,.62)),url('Assets/Bandana_users_bg.jpg');background-size:cover;background-position:center;}
+.photo-bg.midtown{background-image:linear-gradient(rgba(18,17,16,.48),rgba(18,17,16,.62)),url('Assets/Midtown_scenery_bg.jpg');}
+
+/* decorative animals, bottom-right, desktop only (per Figma 228:13149) */
+.deck-animals{position:fixed;right:40px;bottom:6px;width:320px;height:auto;pointer-events:none;z-index:6;}
+@media(max-width:1180px){.deck-animals{display:none;}}
+
+/* duo stat layout */
+.duo{display:flex;gap:40px;align-items:center;justify-content:center;flex-wrap:wrap;margin:6px 0;}
+.duo .cell{display:flex;flex-direction:column;gap:6px;}
+.duo .cell .n{font-size:clamp(52px,8vw,96px);font-weight:600;letter-spacing:-.04em;line-height:1;}
+.duo .cell .l{font-size:12px;font-weight:600;font-stretch:55%;text-transform:uppercase;letter-spacing:.07em;opacity:.6;max-width:240px;margin:0 auto;}
+.duo .vs{font-size:13px;font-weight:600;font-stretch:55%;text-transform:uppercase;letter-spacing:.08em;opacity:.4;}
+
+/* trio counters */
+.trio{display:flex;gap:48px;justify-content:center;flex-wrap:wrap;margin:8px 0;}
+.trio .cell .n{font-size:clamp(40px,6.5vw,76px);font-weight:600;letter-spacing:-.04em;line-height:1;}
+.trio .cell .l{font-size:12px;font-weight:600;font-stretch:55%;text-transform:uppercase;letter-spacing:.07em;margin-top:8px;opacity:.6;}
+
+/* chart slides */
+.chart-wrap{width:100%;max-width:780px;flex:1;min-height:0;position:relative;margin-top:6px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px 12px;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.chart-wrap.bare{background:transparent;border:none;box-shadow:none;padding:0;}
+.legend-row{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:8px;}
+.legend{display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:600;font-stretch:55%;text-transform:uppercase;letter-spacing:.06em;opacity:.7;}
+.legend .sw{width:16px;height:6px;border-radius:3px;}
+
+/* insight chips + analyst note */
+.stat-chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:8px;}
+.chip{background:#f5f2ea;border:1px solid #e7e3d8;border-radius:100px;padding:5px 12px;font-size:11.5px;font-weight:600;font-stretch:55%;text-transform:uppercase;letter-spacing:.04em;color:var(--ink);}
+.chip b{color:var(--ink);font-weight:700;}
+.chip.neg b{color:#b8431e;font-weight:700;}
+.chip.pos b{color:#04795e;font-weight:700;}
+/* clickable Note pill */
+.note-trigger{display:inline-flex;align-items:center;gap:5px;background:#2b2a2a;color:#fff;border:none;border-radius:100px;padding:5px 12px 5px 9px;font-family:inherit;font-size:11.5px;font-weight:600;font-stretch:55%;text-transform:uppercase;letter-spacing:.05em;cursor:pointer;transition:background .2s;}
+.note-trigger:hover{background:#454343;}
+.note-trigger:focus-visible{outline:2px solid var(--yellow);outline-offset:2px;}
+.note-trigger > i{font-size:14px;color:var(--yellow);line-height:1;}
+
+/* note modal overlay (light) */
+.modal-overlay{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(20,20,20,.55);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s ease;}
+.modal-overlay.open{opacity:1;visibility:visible;}
+.modal-card{position:relative;background:#fff;color:var(--ink);border-radius:16px;padding:32px 34px 30px;max-width:520px;width:100%;text-align:left;box-shadow:0 24px 64px rgba(0,0,0,.32);transform:translateY(10px) scale(.98);transition:transform .25s ease;}
+.modal-overlay.open .modal-card{transform:none;}
+.modal-x{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:100px;border:none;background:rgba(0,0,0,.06);color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:19px;transition:background .2s;}
+.modal-x:hover{background:rgba(0,0,0,.12);}
+.modal-x:focus-visible{outline:2px solid var(--yellow-deep);outline-offset:2px;}
+.modal-eyebrow{display:inline-block;font-stretch:55%;text-transform:uppercase;letter-spacing:.07em;font-weight:600;font-size:11px;color:var(--ink);background:var(--yellow);padding:4px 11px;border-radius:100px;margin-bottom:16px;}
+.modal-lead{font-size:20px;font-weight:600;letter-spacing:-.01em;line-height:1.25;margin-bottom:14px;}
+.modal-p{font-size:14.5px;font-weight:400;line-height:1.7;letter-spacing:.005em;color:var(--ink);opacity:.8;margin-bottom:13px;}
+.modal-p:last-child{margin-bottom:0;}
+.modal-p b{font-weight:600;opacity:1;}
+
+/* quote slides */
+.q-mark{font-size:48px;line-height:1;opacity:.9;}
+.s-dark .q-mark{color:var(--yellow);}
+.quote-big{font-size:clamp(24px,3.6vw,38px);font-weight:500;letter-spacing:-.02em;line-height:1.18;max-width:800px;font-style:italic;}
+.quote-who{font-size:12px;font-weight:600;font-stretch:55%;letter-spacing:.08em;text-transform:uppercase;opacity:.55;}
+
+/* verdict cards on analysis slides */
+.mini-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;width:100%;max-width:840px;margin-top:6px;}
+.mini{background:#f5f2ea;border:1px solid #e7e3d8;border-radius:12px;padding:15px 16px 14px;text-align:left;border-top:4px solid var(--line);}
+.s-dark .mini{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.1);box-shadow:none;color:#fff;}
+.mini.b-pos{border-top-color:var(--pos);}
+.mini.b-neg{border-top-color:var(--neg);}
+.mini.b-yel{border-top-color:var(--yellow-deep);}
+.mini h4{font-size:12px;font-weight:600;font-stretch:55%;text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px;opacity:.9;}
+.mini.b-pos h4{color:var(--pos);}
+.mini.b-neg h4{color:var(--neg);}
+.mini.b-yel h4{color:var(--yellow-deep);}
+.mini p{font-size:13px;font-weight:400;line-height:1.42;letter-spacing:.01em;opacity:.78;}
+.mini p b{font-weight:600;opacity:1;}
+
+/* finding slides (10-12) */
+.finding-label{display:inline-flex;align-items:center;font-stretch:55%;text-transform:uppercase;letter-spacing:.07em;font-weight:600;font-size:12px;color:var(--ink);background:rgba(0,0,0,.06);padding:5px 12px;border-radius:8px;margin-bottom:2px;}
+.find-cards{display:flex;justify-content:center;align-items:center;width:100%;max-width:760px;margin-top:10px;text-align:center;}
+.find-card{background:#f5f2ea;border:1px solid #e7e3d8;border-top:4px solid var(--line);border-radius:14px;padding:22px 24px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;max-width:560px;width:100%;text-align:center;}
+.find-card.neg{border-top-color:var(--neg);}
+.find-card.yel{border-top-color:var(--yellow-deep);}
+.find-head{display:flex;align-items:center;gap:7px;font-stretch:55%;text-transform:uppercase;letter-spacing:.07em;font-weight:700;font-size:12px;}
+.find-card.neg .find-head{color:#b8431e;}
+.find-card.yel .find-head{color:#9a7b18;}
+.find-head i{font-size:16px;}
+.find-card p{font-size:13px;line-height:1.5;opacity:.82;font-weight:400;}
+.find-card p b{font-weight:600;opacity:1;}
+@media(max-width:680px){.find-cards{grid-template-columns:1fr;}}
+
+/* action list slide */
+.act-list{display:grid;grid-template-columns:1fr 1fr;gap:8px 22px;width:100%;max-width:820px;text-align:left;margin-top:4px;}
+.pattern-list{display:flex;flex-direction:column;gap:11px;width:100%;max-width:720px;}
+.pat-row{display:grid;grid-template-columns:184px 1fr;align-items:center;gap:14px;}
+.pat-label{font-size:12.5px;font-weight:600;font-stretch:55%;text-transform:uppercase;letter-spacing:.05em;color:var(--ink);text-align:right;}
+.pat-diverge{position:relative;display:flex;align-items:center;height:15px;}
+.pat-diverge::before{content:"";position:absolute;left:50%;top:-4px;bottom:-4px;width:1px;background:rgba(0,0,0,.2);}
+.pat-half{flex:1;display:flex;align-items:center;gap:6px;height:100%;}
+.pat-half.l{justify-content:flex-end;}
+.pat-half.r{justify-content:flex-start;}
+.pat-bar{height:100%;flex:none;}
+.pat-bar.neg{background:var(--neg);border-radius:4px 0 0 4px;}
+.pat-bar.pos{background:var(--pos);border-radius:0 4px 4px 0;}
+.pat-num{font-size:11.5px;font-weight:700;font-stretch:55%;line-height:1;flex:none;}
+.pat-num.zero{opacity:.4;}
+.neg-text{color:#b8431e;}
+.pos-text{color:#04795e;}
+@media(max-width:600px){.pat-row{grid-template-columns:118px 1fr;gap:8px;}}
+.quote-cell{display:flex;flex-direction:column;gap:8px;align-items:center;}
+.inline-q{font-size:clamp(17px,2.3vw,23px);font-weight:700;font-style:italic;line-height:1.3;margin:0;letter-spacing:-.01em;}
+.quote-who-sm{font-size:11px;opacity:.6;font-weight:600;font-stretch:55%;text-transform:uppercase;letter-spacing:.05em;text-align:center;}
+
+/* segment split: two framed experiences */
+.split{display:grid;grid-template-columns:1fr auto 1fr;align-items:stretch;width:100%;max-width:840px;margin:6px 0;}
+.exp{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;border:1px solid var(--line);border-top:4px solid var(--line);border-radius:14px;padding:22px 22px 20px;}
+.exp.pos{background:#f2faf7;border-color:#cfeee5;border-top-color:var(--pos);}
+.exp.neg{background:#fdf4ef;border-color:#f6ddd0;border-top-color:var(--neg);}
+.exp-ic{width:36px;height:36px;border-radius:100px;display:flex;align-items:center;justify-content:center;font-size:19px;}
+.exp.pos .exp-ic{background:rgba(0,183,148,.15);color:#04795e;}
+.exp.neg .exp-ic{background:rgba(237,127,84,.17);color:#b8431e;}
+.exp-tag{font-stretch:55%;text-transform:uppercase;letter-spacing:.07em;font-weight:600;font-size:11px;opacity:.55;}
+.exp-quote{font-size:clamp(16px,2vw,21px);font-weight:700;font-style:italic;line-height:1.28;letter-spacing:-.01em;margin:0;}
+.exp.pos .exp-quote{color:#04795e;}
+.exp.neg .exp-quote{color:#b8431e;}
+.exp-who{font-size:11px;font-weight:600;font-stretch:55%;text-transform:uppercase;letter-spacing:.05em;opacity:.6;}
+.exp-outcome{margin-top:auto;font-size:11px;font-weight:700;font-stretch:55%;text-transform:uppercase;letter-spacing:.05em;padding:4px 12px;border-radius:100px;}
+.exp-outcome.pos{background:rgba(0,183,148,.16);color:#04795e;}
+.exp-outcome.neg{background:rgba(237,127,84,.18);color:#b8431e;}
+.split-vs{display:flex;align-items:center;justify-content:center;font-stretch:55%;text-transform:uppercase;font-weight:700;font-size:12px;color:var(--ink);opacity:.45;padding:0 16px;}
+@media(max-width:700px){.split{grid-template-columns:1fr;}.split-vs{padding:8px 0;}}
+@media(max-width:700px){.act-list{grid-template-columns:1fr;}}
+.act{display:flex;gap:12px;align-items:flex-start;background:rgba(255,255,255,.07);border-radius:10px;padding:11px 14px;border-left:3px solid rgba(252,231,118,.5);}
+.act .n{font-weight:600;font-size:14px;color:var(--yellow);flex:none;font-variant-numeric:tabular-nums;letter-spacing:.02em;}
+.act p{font-size:13px;font-weight:400;line-height:1.4;letter-spacing:.01em;color:#fff;}
+.act p b{font-weight:600;}
+.act p span{opacity:.6;}
+
+/* pills */
+.pill{display:flex;height:40px;padding:14px 16px;justify-content:center;align-items:center;gap:8px;border-radius:24px;background:var(--Surface-Button-secondary,#2B2A2A);color:var(--Text-Button-secondary,#fff);text-align:center;font-family:'Antarctica VAR';font-size:14px;font-weight:600;line-height:130%;letter-spacing:1.12px;text-transform:uppercase;border:none;cursor:pointer;transition:background .3s cubic-bezier(.16,.1,.3,1);font-stretch:55%;}
+.s-dark .pill{background:var(--yellow);color:var(--ink);}
+.pill:hover{border-radius:24px;background:var(--Surface-Button-secondary-hover,#454343);}
+.s-dark .pill:hover{background:#fdec91;color:var(--ink);}
+
+/* arrows (per Figma carousel-spinner) */
+.arrow{
+  position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:100px;
+  background:#fff;border:.5px solid rgba(33,33,33,.08);box-shadow:0 2px 8px rgba(34,34,34,.18);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:40;font-size:24px;color:var(--ink);
+  transition:transform .15s, opacity .2s;
+}
+.arrow:hover{transform:translateY(-50%) scale(1.07);}
+.arrow.prev{left:-24px;}
+.arrow.next{right:-24px;}
+.arrow[disabled]{opacity:.35;cursor:default;}
+@media(max-width:1180px){.arrow.prev{left:8px;}.arrow.next{right:8px;}}
+@media(max-width:640px){.arrow{display:none;}}
+
+/* dots progress (single source of truth, below the card) */
+.deck-foot{display:flex;justify-content:center;align-items:center;gap:6px;margin-top:16px;}
+.dot{
+  width:8px;height:8px;border-radius:4px;background:#d9d5d3;cursor:pointer;border:none;padding:0;
+  transition:width .4s cubic-bezier(.4,0,.2,1), background-color .4s ease, transform .2s ease;
+}
+.dot:hover{background:#b9b4b2;transform:scaleY(1.25);}
+.dot.done{background:var(--yellow-deep);}
+.dot.active{background:var(--ink);width:26px;transform:none;}
+
+/* footer (per Figma 170:12144) */
+footer{height:72px;background:#F7F5EF;display:flex;align-items:center;justify-content:space-between;padding:0 88px;font-size:13px;color:var(--ink);flex:none;}
+@media(max-width:800px){footer{padding:0 24px;}}
+
+.kbd-hint{text-align:center;font-size:11px;font-weight:500;opacity:0;margin-top:12px;pointer-events:none;transition:opacity 1.8s ease;}
+.kbd-hint.show{opacity:.4;}
+</style>
+</head>
+<body>
+
+<nav class="bar">
+  <a class="logo" href="./">
+    <img src="Assets/Header_Logo.svg" alt="Bandana Wrapped" height="32">
+  </a>
+</nav>
+
+<div class="stage">
+  <div class="wrapper">
+    <div class="deck" id="deck">
+      <div class="counter" id="counter"></div>
+
+      <!-- ============ ACT I · THE DATA ============ -->
+
+      <!-- 0 · cover -->
+      <section class="slide s-yellow" data-theme="light">
+        <div class="bg-band" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <defs>
+              <path id="bmark" d="M0.118164 20.5588V2.70266H9.94778C10.5366 2.70266 11.0326 2.2809 11.1272 1.69976L11.2171 1.14866C11.3143 0.551541 11.824 0.118156 12.4291 0.118156H19.0819V17.9742H9.2523C8.66355 17.9742 8.16745 18.3959 8.07278 18.977L7.98295 19.5282C7.88568 20.1254 7.37597 20.5588 6.77095 20.5588L0.118164 20.5588ZM3.50032 17.1766H7.58943C8.17824 17.1766 8.67428 16.7548 8.76889 16.1737L8.85872 15.6225C8.95605 15.0254 9.46582 14.592 10.0708 14.592H14.0416C15.1043 14.592 15.9689 13.7274 15.9689 12.6646C15.9689 11.6019 15.1043 10.7372 14.0416 10.7372H10.4314C9.84266 10.7372 9.34663 11.159 9.25195 11.7401L9.16213 12.2913C9.0648 12.8884 8.55503 13.3218 7.95007 13.3218H3.50032V17.1766ZM3.50032 9.94036L8.76434 9.95115C9.35557 9.95112 9.85155 9.52936 9.94622 8.94831L10.0379 8.38558C10.1352 7.78843 10.6449 7.35505 11.25 7.35505H14.0416C15.1043 7.35505 15.9689 6.49044 15.9689 5.42769C15.9689 4.36494 15.1043 3.50031 14.0416 3.50031H11.6106C11.0218 3.50031 10.5257 3.9221 10.4311 4.5032L10.3413 5.05431C10.244 5.65145 9.73426 6.08484 9.12924 6.08484H3.50032V9.94036Z"/>
+              <pattern id="bandPatA" width="220" height="228" patternUnits="userSpaceOnUse">
+                <use href="#bmark" fill="#2B2A2A" fill-opacity=".16" transform="translate(38,42) scale(2.6)"/>
+                <use href="#bmark" fill="#2B2A2A" fill-opacity=".12" transform="translate(152,160) scale(1.5) rotate(45 10 10.3)"/>
+              </pattern>
+              <pattern id="bandPatB" width="160" height="166" patternUnits="userSpaceOnUse">
+                <use href="#bmark" fill="#efb745" fill-opacity=".9" transform="translate(66,72) scale(1.05) rotate(-22 10 10.3)"/>
+              </pattern>
+            </defs>
+            <rect class="layerA" x="-500" y="-500" width="4000" height="2600" fill="url(#bandPatA)"/>
+            <rect class="layerB" x="-500" y="-500" width="4000" height="2600" fill="url(#bandPatB)"/>
+          </svg>
+        </div>
+        <div style="display:flex;gap:15px;margin-bottom:30px;justify-content:center;">
+          <div style="background:#dfc654;border-radius:8px;padding:4px 8px;font-size:16px;font-weight:500;color:#2b2a2a;letter-spacing:.16px;line-height:1.4;">March 2023 to June 2026</div>
+        </div>
+        <h2 style="font-size:clamp(34px,5vw,50px);font-weight:600;letter-spacing:normal;line-height:1.15;color:#000;">Bandana&rsquo;s Users, Wrapped</h2>
+        <p class="sub" style="font-weight:400;font-stretch:55%;font-size:16px;letter-spacing:.64px;line-height:1.3;text-transform:uppercase;opacity:1;color:#000;max-width:none;margin-top:30px;margin-bottom:0;">An overview of three years of user research interviews</p>
+        <button class="pill" onclick="go(1)" style="margin-top:30px;">Start the recap <i class="ri-arrow-right-s-line"></i></button>
+      </section>
+
+      <!-- 1 · dataset -->
+      <section class="slide s-dark" data-theme="dark">
+        <h2>First, the receipts.</h2>
+        <div class="trio">
+          <div class="cell"><div class="n hl count" data-target="505">0</div><div class="l">Slack messages read</div></div>
+          <div class="cell"><div class="n hl count" data-target="38">0</div><div class="l">Granola meetings pulled</div></div>
+          <div class="cell"><div class="n hl count" data-target="56">0</div><div class="l">Interviews analyzed</div></div>
+        </div>
+        <p class="sub kicker">47 jobseekers, 6 recruiters &amp; employers, and 3 ecosystem</p>
+        <p class="sub">Every interview was tagged against 14 themes and checked against 26 months of Amplitude product data.</p>
+      </section>
+
+      <!-- 2 · patterns (all themes, praise vs. pain) -->
+      <section class="slide s-white" data-theme="light" data-chart="themes">
+        <h2>The patterns that kept coming back</h2>
+        <div class="chart-wrap"><canvas id="themeChart"></canvas></div>
+        <div class="legend-row">
+          <span class="legend"><span class="sw" style="background:var(--pos)"></span>Positive mentions</span>
+          <span class="legend"><span class="sw" style="background:var(--neg)"></span>Negative mentions</span>
+        </div>
+        <p class="sub" style="margin-top:6px;">14 themes across 56 tagged interviews, praise vs. pain.</p>
+      </section>
+
+      <!-- 3b · product context (Amplitude) -->
+      <section class="slide s-white" data-theme="light" data-chart="growth">
+        <h2>Meanwhile, the product 23×'d underneath those interviews.</h2>
+        <div class="chart-wrap"><canvas id="growthChart"></canvas></div>
+        <div class="legend-row">
+          <span class="legend"><span class="sw" style="background:var(--yellow-deep)"></span>Monthly active users</span>
+          <span class="legend"><span class="sw" style="background:var(--pos)"></span>Bandana Apply opt ins / month</span>
+          <span class="legend" style="opacity:.45;">Dashed lines = launches</span>
+        </div>
+        <div class="stat-chips">
+          <span class="chip pos"><b>66k → 1.61M</b> peak MAU</span>
+          <span class="chip pos">Acquisition <b>62%</b> paid social (iOS, n=21)</span>
+          <span class="chip neg">Bandana Apply opt ins <b>↓62%</b> from peak</span>
+          <span class="chip neg">MAU <b>↓11%</b> since Jan '26 peak</span>
+          <button class="note-trigger" type="button" onclick="openNote()" aria-haspopup="dialog"><i class="ri-information-line"></i>Note</button>
+        </div>
+      </section>
+
+      <!-- 4 · funnel -->
+      <section class="slide s-dark" data-theme="dark">
+        <div class="photo-bg" aria-hidden="true"></div>
+        <h2>What users told us, in their own numbers</h2>
+        <div class="trio">
+          <div class="cell"><div class="n hl count" data-target="200">0</div><div class="l">Applications for 1 response (AS)</div></div>
+          <div class="cell"><div class="n hl count" data-target="800">0</div><div class="l">Applications since April (KG)</div></div>
+          <div class="cell"><div class="n hl count" data-target="401">0</div><div class="l">The application that became a job offer (VR, via Bandana)</div></div>
+        </div>
+        <p class="sub">Job seekers are pouring hours a day and hundreds of applications across a half dozen boards into a market that rarely replies, the exact grind Bandana exists to collapse.</p>
+      </section>
+
+      <!-- 6 · zero -->
+      <section class="slide s-yellow" data-theme="light">
+        <div class="big count" data-target="0">0</div>
+        <h2>Positive mentions of employer responsiveness</h2>
+        <p class="sub kicker">against <b>17 negative mentions.</b></p>
+        <p class="sub">The only theme that never got a positive response. Users may also associate this common job search frustration with Bandana as a product.</p>
+      </section>
+
+      <!-- 7 · quote -->
+      <section class="slide s-dark" data-theme="dark">
+        <div class="photo-bg midtown" aria-hidden="true"></div>
+        <div class="q-mark"><i class="ri-double-quotes-l"></i></div>
+        <p class="quote-big">You can apply and apply and apply. And it's like <span class="hl">you don't even get a denial.</span></p>
+        <div class="quote-who">SJ · Oct 2025</div>
+      </section>
+
+      <!-- 8 · acquisition -->
+      <section class="slide s-white" data-theme="light" data-chart="acq">
+        <h2>Where interviewed users come from</h2>
+        <div class="chart-wrap bare" style="max-width:520px;"><canvas id="acqChart"></canvas></div>
+        <p class="sub kicker"><b>62% paid social</b> on iOS. Sarah's study, n=21.</p>
+        <p class="sub"><b>29% word of mouth</b> in markets outside NYC. Katie's study, n=21.</p>
+      </section>
+
+      <!-- 9 · segment split -->
+      <section class="slide s-grey" data-theme="light">
+        <h2>One product, two experiences</h2>
+        <div class="split">
+          <div class="exp pos">
+            <i class="exp-ic ri-thumb-up-line"></i>
+            <div class="exp-tag">Generalists &amp; blue collar</div>
+            <p class="exp-quote">"I love using Bandana a lot."</p>
+            <div class="exp-who">KR · retail &amp; admin seeker</div>
+            <div class="exp-outcome pos">Got interviews</div>
+          </div>
+          <div class="split-vs">VS</div>
+          <div class="exp neg">
+            <i class="exp-ic ri-thumb-down-line"></i>
+            <div class="exp-tag">Niche specialists</div>
+            <p class="exp-quote">"None of these are relevant to me at all."</p>
+            <div class="exp-who">SR · content specialist</div>
+            <div class="exp-outcome neg">16 matches, ~0 relevant</div>
+          </div>
+        </div>
+        <p class="sub kicker"><b>The matching engine decides who loves you.</b></p>
+        <p class="sub">Generalist and blue collar seekers consistently found relevant work. Niche specialists (content, video, creative, DEI) mostly didn't.</p>
+      </section>
+
+      <!-- ============ ACT II · THE ANALYSIS ============ -->
+
+      <!-- 11 · silence analysis -->
+      <section class="slide s-white" data-theme="light">
+        <div class="finding-label">Finding 01</div>
+        <h2>Silence is the market's biggest cruelty, and your biggest opening.</h2>
+        <p class="sub">The #1 frustration every year since 2024, raised unprompted by 36% of jobseekers.</p>
+        <div class="find-cards">
+          <div class="find-card neg">
+            <div class="find-head"><i class="ri-search-eye-line"></i>Evidence</div>
+            <p><b>17 negative mentions.</b> "Even if I requested it? Never." Rejections arriving 2 months late. Users beg for any signal that an application was even opened.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 12 · invisible features -->
+      <section class="slide s-white" data-theme="light">
+        <div class="finding-label">Finding 02</div>
+        <h2>Your best features lose to discovery, not capability.</h2>
+        <p class="sub">Bandana Match is "nearly invisible." Users can't tell the Apply button from a normal one.</p>
+        <div class="find-cards">
+          <div class="find-card neg">
+            <div class="find-head"><i class="ri-search-eye-line"></i>Evidence</div>
+            <p>One user never found the Job Tracker. Another had an account but was never enrolled in emails. Every hesitant Bandana Apply user cited the same fear: <b>loss of control.</b> Bandana Apply opt ins fell <b>~60%</b>, from a peak of 6.1k a month in Oct '25 to 2.4k by May '26, even as MAU kept growing.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 13 · trust analysis -->
+      <section class="slide s-white" data-theme="light">
+        <div class="finding-label">Finding 03</div>
+        <h2>Trust is won on freshness and lost on ghosts.</h2>
+        <p class="sub">One user logged zero dead links across 319 applications, rare praise in this category.</p>
+        <div class="find-cards">
+          <div class="find-card neg">
+            <div class="find-head"><i class="ri-search-eye-line"></i>Evidence</div>
+            <p>Users hit postings that vanished on click, a listing that never existed, and distrust of anything older than <b>3 weeks</b>.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 13 · playbook (final slide) -->
+      <section class="slide s-dark" data-theme="dark">
+        <h2>Users love the product, now we must build the ideas they're asking for.</h2>
+        <div class="act-list">
+          <div class="act"><span class="n">01</span><p>Close the silence by giving applicants a status and a reason, the frustration users name most.</p></div>
+          <div class="act"><span class="n">02</span><p>Match people to roles that fit their niche and experience level, not generic or senior listings.</p></div>
+          <div class="act"><span class="n">03</span><p>Cut email noise to fewer, sharper alerts from one sender at a cadence users choose.</p></div>
+          <div class="act"><span class="n">04</span><p>Keep listings fresh and honest so stale and ghost postings stop eroding trust.</p></div>
+          <div class="act"><span class="n">05</span><p>Help users find the features that already work, like Match, the tracker, and auto apply.</p></div>
+          <div class="act"><span class="n">06</span><p>Ease application friction with direct apply and resume help against ATS and AI screening.</p></div>
+          <div class="act"><span class="n">07</span><p>Build on what users already love, the upfront pay transparency and the location map.</p></div>
+        </div>
+        <button class="pill" onclick="go(0)" style="margin-top:6px;"><i class="ri-restart-line"></i> Replay</button>
+      </section>
+
+    </div>
+
+    <button class="arrow prev" id="prevBtn" aria-label="Previous slide"><i class="ri-arrow-left-s-line"></i></button>
+    <button class="arrow next" id="nextBtn" aria-label="Next slide"><i class="ri-arrow-right-s-line"></i></button>
+
+    <div class="deck-foot" id="dots"></div>
+    <div class="kbd-hint" id="kbdHint">Use ← → keys, swipe, or the arrows</div>
+  </div>
+</div>
+
+<img src="Assets/Bandana_Animals_web.png" class="deck-animals" alt="" aria-hidden="true">
+
+<footer>
+  <span>© 2026 Bandana. All rights reserved.</span>
+</footer>
+
+<!-- Note modal (slide 4) -->
+<div class="modal-overlay" id="noteModal" onclick="if(event.target===this)closeNote()">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="noteModalTitle">
+    <button class="modal-x" type="button" aria-label="Close note" onclick="closeNote()"><i class="ri-close-line"></i></button>
+    <span class="modal-eyebrow" id="noteModalTitle">Note</span>
+    <p class="modal-lead">Correlation ≠ causation.</p>
+    <p class="modal-p">This curve shows <b>reach</b>, not proof of product market fit. The climb coincides with paid social spend, the <b>Apr to May SMS &amp; AMB blasts</b>, and seasonality.</p>
+    <p class="modal-p">With <b>62%</b> of recent users acquired via paid ads, growth is marketing driven as much as product driven. J's study adds that product quality isn't what sends users to competitors.</p>
+    <p class="modal-p">And Bandana Apply opt ins have fallen faster than reach (<b>−62%</b> vs <b>−11%</b> from peak), likely the truer engagement signal.</p>
+  </div>
+</div>
+
+<script>
+/* ============ deck engine ============ */
+const slides = [...document.querySelectorAll('.slide')];
+const deck = document.getElementById('deck');
+const dots = document.getElementById('dots');
+const counter = document.getElementById('counter');
+let cur = 0;
+
+slides.forEach((_,i)=>{
+  const d=document.createElement('button');d.className='dot';
+  d.setAttribute('aria-label','Go to slide '+(i+1));
+  d.onclick=()=>go(i);dots.appendChild(d);
+});
+
+/* keyboard hint: only on slide 0, after 5s of inactivity, slow dissolve-in */
+const kbdHint=document.getElementById('kbdHint');
+let hintTimer=null;
+function scheduleHint(i){
+  clearTimeout(hintTimer);
+  kbdHint.classList.remove('show');
+  if(i===0) hintTimer=setTimeout(()=>kbdHint.classList.add('show'),5000);
+}
+
+function go(i){
+  i=Math.max(0,Math.min(slides.length-1,i));
+  scheduleHint(i);
+  if(i===cur && slides[cur].classList.contains('active')) return;
+  slides.forEach((s,k)=>{
+    s.classList.toggle('active',k===i);
+    s.classList.toggle('exit-left',k<i);
+  });
+  cur=i;
+  // chrome theme
+  deck.classList.toggle('on-dark', slides[i].dataset.theme==='dark');
+  // dot progress: past = done, current = active
+  [...dots.children].forEach((d,k)=>{
+    d.classList.toggle('active',k===i);
+    d.classList.toggle('done',k<i);
+  });
+  counter.textContent = (i+1)+' / '+slides.length;
+  document.getElementById('prevBtn').disabled = i===0;
+  document.getElementById('nextBtn').disabled = i===slides.length-1;
+  // animations
+  animateCounts(slides[i]);
+  if(slides[i].dataset.chart) initChart(slides[i].dataset.chart);
+}
+
+document.getElementById('prevBtn').onclick=()=>go(cur-1);
+document.getElementById('nextBtn').onclick=()=>go(cur+1);
+
+/* note modal (slide 4) */
+const noteModal=document.getElementById('noteModal');
+function openNote(){noteModal.classList.add('open');}
+function closeNote(){noteModal.classList.remove('open');}
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){closeNote();return;}
+  if(noteModal.classList.contains('open')) return; // don't navigate while modal is open
+  if(e.key==='ArrowRight'||e.key===' ') go(cur+1);
+  if(e.key==='ArrowLeft') go(cur-1);
+});
+let tx=null;
+deck.addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+deck.addEventListener('touchend',e=>{
+  if(tx===null)return;
+  const dx=e.changedTouches[0].clientX-tx;
+  if(Math.abs(dx)>50) dx<0?go(cur+1):go(cur-1);
+  tx=null;
+},{passive:true});
+
+/* count-up */
+function animateCounts(slide){
+  slide.querySelectorAll('.count').forEach(el=>{
+    const target=+el.dataset.target;
+    const dur=900;const t0=performance.now();
+    function tick(t){
+      const p=Math.min(1,(t-t0)/dur);
+      const eased=1-Math.pow(1-p,3);
+      el.textContent=Math.round(target*eased);
+      if(p<1)requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  });
+}
+
+/* ============ charts (lazy) ============ */
+const made={};
+const C={yellow:'#fce776',yellowDeep:'#efb745',blue:'#5991d3',green:'#00b794',orange:'#ed7f54',amber:'#efb745',ink:'#212121',soft:'#6f6a68',grid:'#e8e5e3'};
+Chart.defaults.font.family="'Antarctica VAR',sans-serif";
+Chart.defaults.font.size=12;
+Chart.defaults.color=C.soft;
+
+function initChart(name){
+  if(made[name])return;made[name]=true;
+  if(name==='timeline'){
+    const ns=[9,3,0,19,7,9,4];
+    const amp=[
+      'Amplitude: ~69k MAU — early NYC scale',
+      'Amplitude: summer traffic dip (42k MAU in Jul), growth restarts Sept',
+      'Amplitude: MAU 4x’d to ~210k, then 3x’d again by mid-2025',
+      'Amplitude: auto-apply launches Jul ’25 · MAU crosses 1M in Sept',
+      'Amplitude: holiday spike to 1.48M MAU · auto-apply opt-ins peak (6.1k/mo)',
+      'Amplitude: MAU peaks at 1.61M · Job Card V2 rolls out Feb ’26',
+      'Amplitude: SMS blasts + AMB rollout Apr–May · opt-outs spike in May'
+    ];
+    new Chart(document.getElementById('timelineChart'),{type:'line',
+      data:{labels:['2024 Q2','2024 Q3','(no research)','2025 Q3','2025 Q4','2026 Q1','2026 Q2'],datasets:[
+        {label:'Toward Bandana',data:[3.67,3.33,null,3.11,3.57,4.22,3.25],borderColor:C.yellowDeep,backgroundColor:C.yellow,pointBorderColor:C.ink,pointBorderWidth:1.5,pointRadius:5,pointHoverRadius:7,borderWidth:3,spanGaps:true,tension:.35},
+        {label:'Toward the job market',data:[2.89,2.33,null,2.00,2.67,2.88,2.00],borderColor:C.blue,backgroundColor:C.blue,pointRadius:5,pointHoverRadius:7,borderWidth:3,borderDash:[6,5],spanGaps:true,tension:.35}
+      ]},
+      options:{maintainAspectRatio:false,plugins:{legend:{display:false},
+        tooltip:{backgroundColor:'#212121',callbacks:{afterTitle:i=>'n = '+ns[i[0].dataIndex]+' interviews',label:i=>` ${i.dataset.label}: ${i.parsed.y?.toFixed(2)} / 5`,footer:i=>amp[i[0].dataIndex]||''},footerFont:{size:10.5,weight:'500'},footerColor:'#fce776'}},
+        scales:{y:{min:1,max:5,ticks:{stepSize:1},grid:{color:C.grid}},x:{grid:{display:false},ticks:{maxRotation:0,autoSkip:false,font:{size:11}}}}}
+    });
+  }
+  if(name==='growth'){
+    const labels=['Apr 24','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 25','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 26','Feb','Mar','Apr','May'];
+    const mau=[66.3,68.0,72.6,42.0,64.0,92.0,189.4,207.1,213.3,316.8,408.3,418.8,472.2,566.5,645.7,696.1,729.3,1080.8,1290.8,1028.8,1483.5,1608.0,1497.5,1517.9,1374.0,1439.2];
+    const optins=[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,0.025,0.441,5.282,6.088,4.506,3.548,6.463,4.534,4.248,2.848,2.452];
+    const marks=[{i:15,t:'Bandana Apply launches',lv:0},{i:22,t:'Job Card V2',lv:0},{i:24,t:'SMS rollout 100%',lv:1}];
+    const markPlugin={id:'marks',afterDatasetsDraw(ch){
+      const{ctx,chartArea:a,scales:{x}}=ch;ctx.save();
+      const pillH=17,padH=7,gap=4;
+      marks.forEach(m=>{
+        const px=x.getPixelForValue(m.i);
+        const pillTop=a.top+2+m.lv*(pillH+gap);
+        // dashed guide line, starting below the deepest label row
+        ctx.strokeStyle='rgba(33,33,33,.3)';ctx.setLineDash([5,4]);ctx.lineWidth=1.2;
+        ctx.beginPath();ctx.moveTo(px,pillTop+pillH);ctx.lineTo(px,a.bottom);ctx.stroke();
+        // label pill, clamped inside the chart area
+        ctx.setLineDash([]);ctx.font='600 10px Antarctica VAR';
+        const w=ctx.measureText(m.t).width+padH*2;
+        let bx=Math.min(Math.max(px-w/2,a.left+2),a.right-w-2);
+        ctx.fillStyle='rgba(255,255,255,.95)';ctx.strokeStyle='rgba(33,33,33,.25)';ctx.lineWidth=1;
+        ctx.beginPath();ctx.roundRect(bx,pillTop,w,pillH,8);ctx.fill();ctx.stroke();
+        ctx.fillStyle='#212121';ctx.textAlign='left';ctx.textBaseline='middle';
+        ctx.fillText(m.t,bx+padH,pillTop+pillH/2+.5);
+      });
+      ctx.restore();}};
+    new Chart(document.getElementById('growthChart'),{type:'line',
+      data:{labels,datasets:[
+        {label:'Monthly active users (k)',data:mau,yAxisID:'y',borderColor:C.yellowDeep,backgroundColor:'rgba(252,231,118,.25)',fill:true,pointRadius:0,pointHoverRadius:5,borderWidth:3,tension:.18},
+        {label:'Bandana Apply opt ins (k/mo)',data:optins,yAxisID:'y2',borderColor:C.green,backgroundColor:C.green,pointRadius:0,pointHoverRadius:5,borderWidth:2.5,borderDash:[6,5],tension:.18,spanGaps:false}
+      ]},
+      options:{maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+        plugins:{legend:{display:false},
+        tooltip:{backgroundColor:'#212121',callbacks:{label:i=>i.datasetIndex===0?` MAU: ${i.parsed.y>=1000?(i.parsed.y/1000).toFixed(2)+'M':Math.round(i.parsed.y)+'k'}`:` Bandana Apply opt ins: ${Math.round(i.parsed.y*1000).toLocaleString()}`}}},
+        scales:{y:{position:'left',suggestedMax:2000,grid:{color:C.grid},ticks:{callback:v=>v>=1000?(v/1000)+'M':v+'k'}},
+                y2:{position:'right',min:0,max:8,grid:{display:false},ticks:{callback:v=>v+'k'}},
+                x:{grid:{display:false},ticks:{maxRotation:0,font:{size:10},autoSkip:true,maxTicksLimit:10}}}},
+      plugins:[markPlugin]
+    });
+  }
+  if(name==='themes'){
+    const t=[['Pay transparency',7,0],['Resume / AI tools',7,-1],['Auto-apply',7,-2],['Map',9,-3],['UI / UX',12,-8],['Email recs',7,-8],['Search & filters',4,-11],['Job relevance',5,-11],['Stale & ghost jobs',2,-9],['Trust & safety',1,-9],['ATS / AI screening',1,-17],['Employer silence',0,-17]];
+    new Chart(document.getElementById('themeChart'),{type:'bar',
+      data:{labels:t.map(x=>x[0]),datasets:[
+        {label:'Positive',data:t.map(x=>x[1]),backgroundColor:C.green,borderRadius:4,barPercentage:.72},
+        {label:'Negative',data:t.map(x=>x[2]),backgroundColor:C.orange,borderRadius:4,barPercentage:.72}
+      ]},
+      options:{indexAxis:'y',maintainAspectRatio:false,plugins:{legend:{display:false},
+        tooltip:{backgroundColor:'#212121',callbacks:{label:i=>` ${i.dataset.label}: ${Math.abs(i.parsed.x)}`}}},
+        scales:{x:{stacked:true,grid:{color:C.grid},min:-18,max:14,ticks:{callback:v=>Math.abs(v)}},
+                y:{stacked:true,grid:{display:false},ticks:{font:{size:11.5},color:C.ink}}}}
+    });
+  }
+  if(name==='acq'){
+    new Chart(document.getElementById('acqChart'),{type:'doughnut',
+      data:{labels:['Instagram ads (8)','TikTok ads (3)','Word of mouth (3)','Other (7)'],
+        datasets:[{data:[8,3,3,7],backgroundColor:[C.yellow,C.orange,C.green,'#d9d5d3'],borderColor:'#fff',borderWidth:3}]},
+      options:{maintainAspectRatio:false,cutout:'62%',
+        plugins:{legend:{position:'right',labels:{boxWidth:12,boxHeight:12,font:{size:12},color:C.ink}},
+        tooltip:{backgroundColor:'#212121',callbacks:{label:i=>` ${i.parsed} of 21 users`}}}}
+    });
+  }
+}
+
+go(0);
+</script>
+</body>
+</html>
